@@ -1,0 +1,14 @@
+{
+	"name": "Postmark",
+	"description": "Postmark plugin for Croogo",
+
+	"author": "Maury M. Marques",
+	"authorUrl": "https://github.com/maurymmarques/postmark-cakephp",
+
+	"dependencies": {
+		"plugins": [
+			"acl",
+			"extensions"
+		]
+	}
+}
