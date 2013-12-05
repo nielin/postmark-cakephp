@@ -108,10 +108,12 @@ class PostmarkTransport extends AbstractTransport {
 		$message['Cc'] = $this->_headers['Cc'];
 
 		// Bcc
-		$message['Bcc'] = $this->_headers['Bcc'];
+		if(!empty($this->_headers['Bcc']))
+			$message['Bcc'] = $this->_headers['Bcc'];
 
 		// ReplyTo
-		$message['ReplyTo'] = $this->_headers['Reply-To'];
+		if(!empty($this->_headers['Reply-To']))
+			$message['ReplyTo'] = $this->_headers['Reply-To'];
 
 		// Subject
 		$message['Subject'] = mb_decode_mimeheader($this->_headers['Subject']);
