@@ -1,18 +1,18 @@
 # Postmark plugin for CakePHP
 
-Copyright 2011, Maury M. Marques
-Licensed under The MIT License
-Redistributions of files must retain the above copyright notice.
-
+CakePHP plugin that makes email delivery using [Postmark](https://postmarkapp.com)
 
 ### Version
 
-Written for CakePHP 2.0+
+Written for CakePHP 2.x
 
+### Copyright
 
-### Installation
+Copyright (c) 2011 Maury M. Marques
 
-You can clone the plugin into your project (or if you want you can use as a [submodule](http://help.github.com/submodules)):
+## Installation
+
+You can clone the plugin into your project (or if you want you can use it as a [submodule](http://help.github.com/submodules)):
 
 ```
 cd path/to/app/Plugin or /plugins
@@ -22,39 +22,39 @@ git clone https://github.com/maurymmarques/postmark-cakephp.git Postmark
 Bootstrap the plugin in app/Config/bootstrap.php:
 
 ```php
-<?php
 CakePlugin::load('Postmark');
 ```
 
-
-### Configuration
+## Configuration
 
 Create the file app/Config/email.php with the class EmailConfig.
 
 ```php
-<?php
 class EmailConfig {
 	public $postmark = array(
 		'transport' => 'Postmark.Postmark',
 		'uri' => 'http://api.postmarkapp.com/email',
-		'key' => 'your-key-postmark'
+		'key' => 'your-postmark-key',
+		'track_opens' => true
 	);
 }
 ```
 
-If you want your connection to Postmark to be encrypted, simply change the uri to use https.
+If you want your connection to Postmark to be encrypted, simply change the uri to use `https`.
 
-Make sure to modified the API key to match the credentials for your Postmark server rack instance.
+You can set [track_opens](http://developer.postmarkapp.com/developer-build.html#open-tracking) to `false` or remove it from the config array if you don't want Postmark to track emails.
+Read more about [Open Tracking](http://blog.postmarkapp.com/post/87919491263/open-tracking-is-finally-here).
+
+Note: Make sure to modified the API key to match the credentials for your Postmark server rack instance.
 
 
-### Usage
+## Usage
 
 This plugin uses [CakeEmail](http://book.cakephp.org/2.0/en/core-utility-libraries/email.html), and works virtually the same.
 
 Then, simply send messages like this:
 
 ```php
-<?php
 App::uses('CakeEmail', 'Network/Email');
 $email = new CakeEmail();
 
@@ -68,7 +68,6 @@ $email->send('Message');
 Or use more resources:
 
 ```php
-<?php
 App::uses('CakeEmail', 'Network/Email');
 $email = new CakeEmail();
 
@@ -94,7 +93,6 @@ $email->send();
 If you need the instance of the class PostmarkTrasport:
 
 ```php
-<?php
 App::uses('CakeEmail', 'Network/Email');
 $email = new CakeEmail();
 
@@ -110,12 +108,11 @@ For more information, see the Postmark API documentation:
 http://developer.postmarkapp.com/#message-format
 
 
-### Debugging
+## Debugging
 
 You can see the response from Postmark in the return value when you send a message:
 
 ```php
-<?php
 $result = $email->send('Message');
 $this->log($result, 'debug');
 ```
@@ -125,7 +122,7 @@ If there are any errors, they'll be included in the response. See the Postmark A
 http://developer.postmarkapp.com/#api-error-codes
 
 
-### CakePHP 1.3+
+## CakePHP 1.3+
 
 This class does not work for CakePHP 1.3, for this see:
 

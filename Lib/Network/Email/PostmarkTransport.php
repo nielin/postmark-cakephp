@@ -98,6 +98,10 @@ class PostmarkTransport extends AbstractTransport {
 		// Message
 		$message = array();
 
+		if (isset($this->_config['track_opens'])) {
+			$message['TrackOpens'] = $this->_config['track_opens'];
+		}
+
 		// From
 		$message['From'] = $this->_headers['From'];
 
@@ -108,12 +112,12 @@ class PostmarkTransport extends AbstractTransport {
 		$message['Cc'] = $this->_headers['Cc'];
 
 		// Bcc
-		if(!empty($this->_headers['Bcc']))
-			$message['Bcc'] = $this->_headers['Bcc'];
+		$message['Bcc'] = $this->_headers['Bcc'];
 
 		// ReplyTo
-		if(!empty($this->_headers['Reply-To']))
+		if ($this->_headers['Reply-To'] !== false) {
 			$message['ReplyTo'] = $this->_headers['Reply-To'];
+		}
 
 		// Subject
 		$message['Subject'] = mb_decode_mimeheader($this->_headers['Subject']);
@@ -150,16 +154,20 @@ class PostmarkTransport extends AbstractTransport {
 
 		$i = 0;
 		foreach ($this->_cakeEmail->attachments() as $fileName => $fileInfo) {
-
-			$handle = fopen($fileInfo['file'], 'rb');
-			$data = fread($handle, filesize($fileInfo['file']));
-			$data = chunk_split(base64_encode($data)) ;
-			fclose($handle);
-
+			if (isset($fileInfo['file'])) {
+				$handle = fopen($fileInfo['file'], 'rb');
+				$data = fread($handle, filesize($fileInfo['file']));
+				$data = chunk_split(base64_encode($data)) ;
+				fclose($handle);
+				$attachments[$i]['Content'] = $data;
+			} elseif (isset($fileInfo['data'])) {
+				$attachments[$i]['Content'] = $fileInfo['data'];
+			}
 			$attachments[$i]['Name'] = $fileName;
-			$attachments[$i]['Content'] = $data;
 			$attachments[$i]['ContentType'] = $fileInfo['mimetype'];
-
+			if (isset($fileInfo['contentId'])) {
+				$attachments[$i]['ContentId'] = $fileInfo['contentId'];
+			}
 			$i++;
 		}
 
